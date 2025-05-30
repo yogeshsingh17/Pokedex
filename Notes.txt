@@ -1,0 +1,3 @@
+Notes
+
+API which is being used to build this project : https://pokeapi.co/
