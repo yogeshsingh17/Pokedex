@@ -22,7 +22,6 @@ function PokemonDetails(){
             height : pokemon.height,
             types : pokemon.types,
             image : pokemon.sprites.other.dream_world.front_default
-
         });
 
         // console.log(response);

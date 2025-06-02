@@ -7,20 +7,17 @@ function PokemonList(){
 
     const DEFAULT_URL = "https://pokeapi.co/api/v2/pokemon";
 
-    const [pokedexUrl, setPokedexUrl] = useState(DEFAULT_URL);
-
-    const [pokemonList, setPokemonList] = useState([]);
-
-    const [nextUrl, setNextUrl] = useState(DEFAULT_URL);
-    const [prevUrl, setPrevUrl] = useState(DEFAULT_URL);
+    const [pokemonListState, setPokemonListState] = useState({
+        pokedexUrl : DEFAULT_URL,
+        pokemonList : [],
+        nextUrl : DEFAULT_URL,
+        prevUrl : DEFAULT_URL
+    });
 
     async function downloadPokemon(){
         try{
-            const response = await axios.get(pokedexUrl ? pokedexUrl : DEFAULT_URL);
+            const response = await axios.get(pokemonListState.pokedexUrl ? pokemonListState.pokedexUrl : DEFAULT_URL);
             console.log(response.data);
-
-            setNextUrl(response.data.next);
-            setPrevUrl(response.data.previous);
 
             const pokemonResults = response.data.results;
 
@@ -39,8 +36,16 @@ function PokemonList(){
                 }
             })
 
-            setPokemonList(pokemonFinalList)
-            // console.log(pokemonFinalList);
+            /*Passing the updater callback to update the state. If updater callback is not used and we 
+              directly use the currentState, it might be stale and not updated in case multiple changes occur.
+              So to avoid using stale state we use updater callback to ensure that we are working with the 
+              latest updated state.*/
+            setPokemonListState((state) => ({
+                ...state,
+                pokemonList : pokemonFinalList,
+                nextUrl : response.data.next,
+                prevUrl : response.data.previous
+            }))
         }
         catch(error){
             console.log("Error occured : ", error)
@@ -49,7 +54,7 @@ function PokemonList(){
 
     useEffect(() => {
         downloadPokemon();
-    }, [pokedexUrl]);
+    }, [pokemonListState.pokedexUrl]);
 
     return (
         <div className='pokemon-list-wrapper'>
@@ -58,14 +63,14 @@ function PokemonList(){
             </div>
             <div className='prev-next-button'>
                 <div>
-                    <button onClick={() => setPokedexUrl(prevUrl)}>Prev</button>
+                    <button onClick={() => setPokemonListState((state) => ({...state, pokedexUrl: state.prevUrl}))}>Prev</button>
                 </div>
                 <div>
-                    <button onClick={() => setPokedexUrl(nextUrl)}>Next</button>
+                    <button onClick={() => setPokemonListState((state) => ({...state, pokedexUrl : state.nextUrl}))}>Next</button>
                 </div>
             </div>
             <div className='pokemon-list'>
-                {pokemonList.map(pokemon => <Pokemon name={pokemon.name} url={pokemon.image} key={pokemon.id} id={pokemon.id} />)}
+                {pokemonListState.pokemonList.map(pokemon => <Pokemon name={pokemon.name} url={pokemon.image} key={pokemon.id} id={pokemon.id} />)}
             </div>
         </div>
     )
