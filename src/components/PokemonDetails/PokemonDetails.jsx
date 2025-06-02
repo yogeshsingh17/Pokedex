@@ -1,35 +1,12 @@
-import { useEffect, useState } from 'react';
 import style from './PokemonDetails.module.css'
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import usePokemon from '../../hooks/usePokemon';        //Custom Hook
 
 function PokemonDetails(){
 
     const {id} = useParams();
 
-    const POKEMON_DETAIL_URL = 'https://pokeapi.co/api/v2/pokemon/';
-
-    const [pokemon, setPokemon] = useState(null);
-
-    async function downloadPokemon(){
-        const response = await axios.get(POKEMON_DETAIL_URL + id);
-
-        const pokemon = response.data;
-
-        setPokemon({
-            name : pokemon.name,
-            weight : pokemon.weight,
-            height : pokemon.height,
-            types : pokemon.types,
-            image : pokemon.sprites.other.dream_world.front_default
-        });
-
-        // console.log(response);
-    }
-
-    useEffect(() => {
-        downloadPokemon();
-    }, []);
+    const [pokemon] = usePokemon(id);
 
     return (
         <div className=''>
