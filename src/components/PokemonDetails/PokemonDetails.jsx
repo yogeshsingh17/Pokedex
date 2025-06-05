@@ -1,12 +1,13 @@
 import style from './PokemonDetails.module.css'
 import { Link, useParams } from 'react-router-dom';
 import usePokemon from '../../hooks/usePokemon';        //Custom Hook
+import Pokemon from '../Pokemon/Pokemon';
 
 function PokemonDetails(){
 
-    const {id} = useParams();
+    const {id} = useParams();       //useParams is a hook provided by react-router-dom to access the dynamic segments of the URL
 
-    const [pokemon] = usePokemon(id);
+    const [pokemon, pokemonListState] = usePokemon(id);
 
     return (
         <div className=''>
@@ -38,6 +39,15 @@ function PokemonDetails(){
                                 </div>
                             </div>
                         </div>}
+
+                        <div className={style['similar-pokemons']}>
+                            <h2>
+                                Similar Pokemons
+                            </h2>
+                            <div className={style['pokemon-similar-boxes']}>
+                                {pokemonListState.pokemonList.length > 0 && pokemonListState.pokemonList.map((pokemon) => <Pokemon name={pokemon.name} url={pokemon.image} key={pokemon.id} id={pokemon.id} /> )}
+                            </div>
+                        </div>
         </div>
     )
 }

@@ -78,3 +78,16 @@
     background-color: azure;
 }
 
+/* Styling similar pokemons */
+.similar-pokemons{
+    display: flex;
+    flex-direction: column;
+}
+
+.pokemon-similar-boxes{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
