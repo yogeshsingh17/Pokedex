@@ -1,13 +1,11 @@
 import style from './PokemonDetails.module.css'
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import usePokemon from '../../hooks/usePokemon';        //Custom Hook
 import Pokemon from '../Pokemon/Pokemon';
 
-function PokemonDetails(){
+function PokemonDetails( {pokemonName} ){
 
-    const {id} = useParams();       //useParams is a hook provided by react-router-dom to access the dynamic segments of the URL
-
-    const [pokemon, pokemonListState] = usePokemon(id);
+    const [pokemon, pokemonListState] = usePokemon(pokemonName);
 
     return (
         <div className=''>
